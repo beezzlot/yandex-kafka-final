@@ -157,7 +157,7 @@ docker info
 ## 3. Клонирование репозитория
 
 ```bash
-git clone [https://github.com/beezzlot/yandex-kafka-final.git](https://github.com/beezzlot/yandex-kafka-final.git)
+git clone https://github.com/beezzlot/yandex-kafka-final.git
 
 cd yandex-kafka-final
 ```
@@ -279,7 +279,7 @@ test -s monitoring/jmx/kafka.yml
 mkdir -p monitoring/jmx
 
 curl --fail --location --retry 3 \
-  [https://repo.maven.apache.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/1.0.1/jmx_prometheus_javaagent-1.0.1.jar](https://repo.maven.apache.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/1.0.1/jmx_prometheus_javaagent-1.0.1.jar) \
+  https://repo.maven.apache.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/1.0.1/jmx_prometheus_javaagent-1.0.1.jar \
   --output monitoring/jmx/jmx_prometheus_javaagent.jar
 ```
 
