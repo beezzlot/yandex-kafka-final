@@ -185,3 +185,37 @@ services:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - kafka-internal
+
+  ksqldb-server:
+    image: confluentinc/cp-ksqldb-server:7.5.0
+    container_name: ksqldb-server
+    hostname: ksqldb-server
+    restart: unless-stopped
+    depends_on:
+      - broker1
+      - broker2
+      - broker3
+    ports:
+      - "127.0.0.1:8088:8088"
+    environment:
+      KSQL_LISTENERS: "http://0.0.0.0:8088"
+      KSQL_BOOTSTRAP_SERVERS: "broker1:9092,broker2:9092,broker3:9092"
+      KSQL_KSQL_SERVICE_ID: "marketplace_"
+
+      KSQL_SECURITY_PROTOCOL: "SSL"
+      KSQL_SSL_TRUSTSTORE_LOCATION: "/etc/kafka/secrets/app.truststore.jks"
+      KSQL_SSL_TRUSTSTORE_PASSWORD: "changeit"
+      KSQL_SSL_KEYSTORE_LOCATION: "/etc/kafka/secrets/app.keystore.jks"
+      KSQL_SSL_KEYSTORE_PASSWORD: "changeit"
+      KSQL_SSL_KEY_PASSWORD: "changeit"
+
+      KSQL_KSQL_STREAMS_REPLICATION_FACTOR: 3
+      KSQL_KSQL_INTERNAL_TOPIC_REPLICAS: 3
+      KSQL_KSQL_SINK_REPLICAS: 3
+      KSQL_KSQL_STREAMS_PRODUCER_ACKS: "all"
+      KSQL_KSQL_STREAMS_AUTO_OFFSET_RESET: "earliest"
+    volumes:
+      - ./ssl/app.truststore.jks:/etc/kafka/secrets/app.truststore.jks:ro
+      - ./ssl/app.keystore.jks:/etc/kafka/secrets/app.keystore.jks:ro
+    networks:
+      - kafka-internal

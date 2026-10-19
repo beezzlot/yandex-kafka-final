@@ -100,6 +100,14 @@ kafka-acls \
   --operation Write \
   --operation Create \
   --operation Describe \
-  --topic "client.recommendations"
+  --topic "client.recommendations" 
+
+kafka-configs \
+  --bootstrap-server "$BOOTSTRAP" \
+  --command-config "$CLIENT_CONFIG" \
+  --entity-type topics \
+  --entity-name client.recommendations \
+  --alter \
+  --add-config cleanup.policy=compact,min.insync.replicas=2
 
 echo "Kafka topics and ACLs initialized"
