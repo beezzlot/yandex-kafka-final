@@ -1,0 +1,25 @@
+[
+  {
+    "product_id": "99999",
+    "name": "Запрещённый товар",
+    "description": "Тестовый запрещённый товар",
+    "price": {
+      "amount": 100.00,
+      "currency": "RUB"
+    },
+    "category": "Запрещённая категория",
+    "brand": "BadBrand",
+    "stock": {
+      "available": 10,
+      "reserved": 0
+    },
+    "sku": "BAD-99999",
+    "tags": ["test"],
+    "images": [],
+    "specifications": {},
+    "created_at": "2026-10-19T10:00:00Z",
+    "updated_at": "2026-10-19T10:00:00Z",
+    "index": "products",
+    "store_id": "store_001"
+  }
+]

@@ -1,0 +1,187 @@
+version: '3.8'
+
+networks:
+  kafka-internal:
+    external: true
+
+volumes:
+  zookeeper-data:
+  broker1-data:
+  broker2-data:
+  broker3-data:
+  postgres-data:
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    hostname: zookeeper
+    restart: unless-stopped
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - kafka-internal
+
+  broker1:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: broker1
+    hostname: broker1
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9094:9094"
+    environment:
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://broker1:9092,EXTERNAL://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:SSL,EXTERNAL:SSL
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_SSL_CLIENT_AUTH: "required"
+      # Используем абсолютные пути (LOCATION вместо FILENAME) для 100% надежности
+      KAFKA_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/broker1.keystore.jks
+      KAFKA_SSL_KEYSTORE_PASSWORD: changeit
+      KAFKA_SSL_KEY_PASSWORD: changeit
+      KAFKA_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/broker1.truststore.jks
+      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
+      KAFKA_SUPER_USERS: "User:CN=app;User:CN=broker1;User:CN=broker2;User:CN=broker3"
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: changeit
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+    volumes:
+      - broker1-data:/var/lib/kafka/data
+      - ./ssl/broker1:/etc/kafka/secrets:ro
+    networks:
+      - kafka-internal
+
+  broker2:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: broker2
+    hostname: broker2
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    ports:
+      - "9093:9092"
+      - "9095:9094"
+    environment:
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://broker2:9092,EXTERNAL://localhost:9095
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:SSL,EXTERNAL:SSL
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_SSL_CLIENT_AUTH: "required"
+      KAFKA_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/broker2.keystore.jks
+      KAFKA_SSL_KEYSTORE_PASSWORD: changeit
+      KAFKA_SSL_KEY_PASSWORD: changeit
+      KAFKA_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/broker2.truststore.jks
+      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
+      KAFKA_SUPER_USERS: "User:CN=app;User:CN=broker1;User:CN=broker2;User:CN=broker3"
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: changeit  # <-- ЭТО БЫЛО ПРОПУЩЕНО
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+    volumes:
+      - broker2-data:/var/lib/kafka/data
+      - ./ssl/broker2:/etc/kafka/secrets:ro
+    networks:
+      - kafka-internal
+
+  broker3:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: broker3
+    hostname: broker3
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    ports:
+      - "9081:9092"
+      - "9083:9094"
+    environment:
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://broker3:9092,EXTERNAL://localhost:9083
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:SSL,EXTERNAL:SSL
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_SSL_CLIENT_AUTH: "required"
+      KAFKA_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/broker3.keystore.jks
+      KAFKA_SSL_KEYSTORE_PASSWORD: changeit
+      KAFKA_SSL_KEY_PASSWORD: changeit
+      KAFKA_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/broker3.truststore.jks
+      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
+      KAFKA_SUPER_USERS: "User:CN=app;User:CN=broker1;User:CN=broker2;User:CN=broker3"
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: changeit  # <-- ЭТО БЫЛО ПРОПУЩЕНО
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+    volumes:
+      - broker3-data:/var/lib/kafka/data
+      - ./ssl/broker3:/etc/kafka/secrets:ro
+    networks:
+      - kafka-internal
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:v0.7.2
+    container_name: kafka-ui
+    restart: unless-stopped
+    depends_on:
+      - broker1
+      - broker2
+      - broker3
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: "local-ssl"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "broker1:9092,broker2:9092,broker3:9092"
+      KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL: "SSL"
+      KAFKA_CLUSTERS_0_PROPERTIES_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/app.truststore.jks
+      KAFKA_CLUSTERS_0_PROPERTIES_SSL_TRUSTSTORE_PASSWORD: "changeit"
+      KAFKA_CLUSTERS_0_PROPERTIES_SSL_TRUSTSTORE_TYPE: "JKS"
+      KAFKA_CLUSTERS_0_PROPERTIES_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/app.keystore.jks
+      KAFKA_CLUSTERS_0_PROPERTIES_SSL_KEYSTORE_PASSWORD: "changeit"
+      KAFKA_CLUSTERS_0_PROPERTIES_SSL_KEYSTORE_TYPE: "JKS"
+      KAFKA_CLUSTERS_0_PROPERTIES_SSL_KEY_PASSWORD: "changeit"
+    volumes:
+      - ./ssl:/etc/kafka/secrets:ro
+    networks:
+      - kafka-internal
+
+  init-topics:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: init-topics
+    restart: "no"
+    depends_on:
+      - broker1
+      - broker2
+      - broker3
+    networks:
+      - kafka-internal
+    environment:
+      KAFKA_BOOTSTRAP_SERVER: broker1:9092
+    volumes:
+      - ./scripts/init-kafka-topics.sh:/init-kafka-topics.sh:ro
+      - ./ssl:/etc/kafka/secrets:ro
+    entrypoint: ["/bin/bash", "/init-kafka-topics.sh"]
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: marketplace
+      POSTGRES_USER: marketplace
+      POSTGRES_PASSWORD: marketplace
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - kafka-internal

@@ -1,0 +1,119 @@
+version: '3.8'
+
+networks:
+  kafka-internal:
+    external: true
+
+volumes:
+  zookeeper-mirror-data:
+  broker-mirror1-data:
+  broker-mirror2-data:
+  broker-mirror3-data:
+
+services:
+  zookeeper-mirror:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper-mirror
+    hostname: zookeeper-mirror
+    restart: unless-stopped
+    ports:
+      - "2182:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - kafka-internal
+
+  broker-mirror1:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: broker-mirror1
+    hostname: broker-mirror1
+    restart: unless-stopped
+    depends_on:
+      - zookeeper-mirror
+    ports:
+      - "9196:9092"
+    environment:
+      KAFKA_BROKER_ID: 101
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-mirror:2181
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://broker-mirror1:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+    volumes:
+      - broker-mirror1-data:/var/lib/kafka/data
+    networks:
+      - kafka-internal
+
+  broker-mirror2:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: broker-mirror2
+    hostname: broker-mirror2
+    restart: unless-stopped
+    depends_on:
+      - zookeeper-mirror
+    ports:
+      - "9197:9092"
+    environment:
+      KAFKA_BROKER_ID: 102
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-mirror:2181
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://broker-mirror2:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+    volumes:
+      - broker-mirror2-data:/var/lib/kafka/data
+    networks:
+      - kafka-internal
+
+  broker-mirror3:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: broker-mirror3
+    hostname: broker-mirror3
+    restart: unless-stopped
+    depends_on:
+      - zookeeper-mirror
+    ports:
+      - "9198:9092"
+    environment:
+      KAFKA_BROKER_ID: 103
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-mirror:2181
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://broker-mirror3:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+    volumes:
+      - broker-mirror3-data:/var/lib/kafka/data
+    networks:
+      - kafka-internal
+
+  mirror-maker:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: mirror-maker
+    restart: unless-stopped
+    depends_on:
+      - broker-mirror1
+      - broker-mirror2
+      - broker-mirror3
+    volumes:
+      - ./config/mm2.properties:/etc/kafka/mm2.properties:ro
+      - ./config/connect-log4j.properties:/etc/kafka/connect-log4j.properties:ro
+      - ./ssl:/etc/kafka/secrets:ro
+    entrypoint:
+      - /bin/bash
+      - -c
+      - "export KAFKA_LOG4J_OPTS='-Dlog4j.configuration=file:/etc/kafka/connect-log4j.properties'; exec connect-mirror-maker /etc/kafka/mm2.properties"
+    networks:
+      - kafka-internal

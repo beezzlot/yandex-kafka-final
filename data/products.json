@@ -1,0 +1,264 @@
+[
+  {
+    "product_id": "12345",
+    "name": "Умные часы XYZ",
+    "description": "Умные часы с функцией мониторинга здоровья, GPS и уведомлениями.",
+    "price": {
+      "amount": 4999.99,
+      "currency": "RUB"
+    },
+    "category": "Электроника",
+    "brand": "XYZ",
+    "stock": {
+      "available": 150,
+      "reserved": 20
+    },
+    "sku": "XYZ-12345",
+    "tags": ["умные часы", "гаджеты", "технологии"],
+    "images": [
+      {
+        "url": "https://example.com/images/product1.jpg",
+        "alt": "Умные часы XYZ - вид спереди"
+      },
+      {
+        "url": "https://example.com/images/product1_side.jpg",
+        "alt": "Умные часы XYZ - вид сбоку"
+      }
+    ],
+    "specifications": {
+      "weight": "50g",
+      "dimensions": "42mm x 36mm x 10mm",
+      "battery_life": "24 hours",
+      "water_resistance": "IP68"
+    },
+    "created_at": "2023-10-01T12:00:00Z",
+    "updated_at": "2023-10-10T15:30:00Z",
+    "index": "products",
+    "store_id": "store_001"
+  },
+  {
+    "product_id": "12346",
+    "name": "Беспроводные наушники SoundMax",
+    "description": "Наушники с активным шумоподавлением и до 30 часов автономной работы.",
+    "price": {
+      "amount": 7999.00,
+      "currency": "RUB"
+    },
+    "category": "Электроника",
+    "brand": "SoundMax",
+    "stock": {
+      "available": 80,
+      "reserved": 5
+    },
+    "sku": "SM-12346",
+    "tags": ["наушники", "аудио", "bluetooth"],
+    "images": [
+      {
+        "url": "https://example.com/images/product2.jpg",
+        "alt": "Наушники SoundMax"
+      }
+    ],
+    "specifications": {
+      "weight": "250g",
+      "battery_life": "30 hours",
+      "bluetooth": "5.3"
+    },
+    "created_at": "2023-10-02T10:00:00Z",
+    "updated_at": "2023-10-12T14:00:00Z",
+    "index": "products",
+    "store_id": "store_001"
+  },
+  {
+    "product_id": "12347",
+    "name": "Ноутбук TechPro 15",
+    "description": "Лёгкий ноутбук для работы и учёбы с процессором последнего поколения.",
+    "price": {
+      "amount": 54999.00,
+      "currency": "RUB"
+    },
+    "category": "Электроника",
+    "brand": "TechPro",
+    "stock": {
+      "available": 25,
+      "reserved": 3
+    },
+    "sku": "TP-12347",
+    "tags": ["ноутбук", "компьютер", "работа"],
+    "images": [
+      {
+        "url": "https://example.com/images/product3.jpg",
+        "alt": "Ноутбук TechPro 15"
+      }
+    ],
+    "specifications": {
+      "weight": "1.4kg",
+      "screen": "15.6 inch",
+      "ram": "16GB",
+      "storage": "512GB SSD"
+    },
+    "created_at": "2023-10-03T09:00:00Z",
+    "updated_at": "2023-10-13T11:00:00Z",
+    "index": "products",
+    "store_id": "store_002"
+  },
+  {
+    "product_id": "12348",
+    "name": "Кроссовки RunFast",
+    "description": "Беговые кроссовки с амортизацией и дышащим верхом.",
+    "price": {
+      "amount": 6499.00,
+      "currency": "RUB"
+    },
+    "category": "Спорт",
+    "brand": "RunFast",
+    "stock": {
+      "available": 200,
+      "reserved": 15
+    },
+    "sku": "RF-12348",
+    "tags": ["кроссовки", "бег", "спорт"],
+    "images": [
+      {
+        "url": "https://example.com/images/product4.jpg",
+        "alt": "Кроссовки RunFast"
+      }
+    ],
+    "specifications": {
+      "weight": "300g",
+      "material": "mesh",
+      "sizes": "39-45"
+    },
+    "created_at": "2023-10-04T08:00:00Z",
+    "updated_at": "2023-10-14T16:00:00Z",
+    "index": "products",
+    "store_id": "store_002"
+  },
+  {
+    "product_id": "12349",
+    "name": "Коврик для йоги ZenMat",
+    "description": "Нескользящий коврик для йоги и фитнеса с разметкой для упражнений.",
+    "price": {
+      "amount": 1999.00,
+      "currency": "RUB"
+    },
+    "category": "Спорт",
+    "brand": "ZenMat",
+    "stock": {
+      "available": 300,
+      "reserved": 10
+    },
+    "sku": "ZM-12349",
+    "tags": ["йога", "фитнес", "коврик"],
+    "images": [
+      {
+        "url": "https://example.com/images/product5.jpg",
+        "alt": "Коврик для йоги ZenMat"
+      }
+    ],
+    "specifications": {
+      "weight": "1.1kg",
+      "material": "TPE",
+      "dimensions": "183cm x 61cm"
+    },
+    "created_at": "2023-10-05T07:00:00Z",
+    "updated_at": "2023-10-15T18:00:00Z",
+    "index": "products",
+    "store_id": "store_003"
+  },
+  {
+    "product_id": "12350",
+    "name": "Кофемашина BaristaHome",
+    "description": "Автоматическая кофемашина с капучинатором и настройкой крепости кофе.",
+    "price": {
+      "amount": 34999.00,
+      "currency": "RUB"
+    },
+    "category": "Дом и кухня",
+    "brand": "BaristaHome",
+    "stock": {
+      "available": 40,
+      "reserved": 2
+    },
+    "sku": "BH-12350",
+    "tags": ["кофе", "кофемашина", "кухня"],
+    "images": [
+      {
+        "url": "https://example.com/images/product6.jpg",
+        "alt": "Кофемашина BaristaHome"
+      }
+    ],
+    "specifications": {
+      "weight": "7.5kg",
+      "pressure": "15 bar",
+      "water_tank": "1.8L"
+    },
+    "created_at": "2023-10-06T06:00:00Z",
+    "updated_at": "2023-10-16T20:00:00Z",
+    "index": "products",
+    "store_id": "store_003"
+  },
+  {
+    "product_id": "12351",
+    "name": "Робот-пылесос CleanBot",
+    "description": "Робот-пылесос с влажной уборкой и управлением через приложение.",
+    "price": {
+      "amount": 24999.00,
+      "currency": "RUB"
+    },
+    "category": "Дом и кухня",
+    "brand": "CleanBot",
+    "stock": {
+      "available": 60,
+      "reserved": 4
+    },
+    "sku": "CB-12351",
+    "tags": ["пылесос", "робот", "уборка"],
+    "images": [
+      {
+        "url": "https://example.com/images/product7.jpg",
+        "alt": "Робот-пылесос CleanBot"
+      }
+    ],
+    "specifications": {
+      "weight": "3.2kg",
+      "battery_life": "150 minutes",
+      "dustbin": "0.6L"
+    },
+    "created_at": "2023-10-07T05:00:00Z",
+    "updated_at": "2023-10-17T19:00:00Z",
+    "index": "products",
+    "store_id": "store_001"
+  },
+  {
+    "product_id": "12352",
+    "name": "Книга 'Основы Python'",
+    "description": "Практическое руководство по программированию на Python для начинающих.",
+    "price": {
+      "amount": 1299.00,
+      "currency": "RUB"
+    },
+    "category": "Книги",
+    "brand": "CodePress",
+    "stock": {
+      "available": 500,
+      "reserved": 30
+    },
+    "sku": "CP-12352",
+    "tags": ["книга", "python", "программирование"],
+    "images": [
+      {
+        "url": "https://example.com/images/product8.jpg",
+        "alt": "Книга Основы Python"
+      }
+    ],
+    "specifications": {
+      "pages": "420",
+      "language": "Russian",
+      "format": "paperback"
+    },
+    "created_at": "2023-10-08T04:00:00Z",
+    "updated_at": "2023-10-18T21:00:00Z",
+    "index": "products",
+    "store_id": "store_002"
+  }
+]
