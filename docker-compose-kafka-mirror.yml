@@ -44,8 +44,10 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_OPTS: "-javaagent:/opt/jmx/jmx_prometheus_javaagent.jar=9404:/opt/jmx/kafka.yml"
     volumes:
       - broker-mirror1-data:/var/lib/kafka/data
+      - ./monitoring/jmx:/opt/jmx:ro
     networks:
       - kafka-internal
 
@@ -69,8 +71,10 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_OPTS: "-javaagent:/opt/jmx/jmx_prometheus_javaagent.jar=9404:/opt/jmx/kafka.yml"
     volumes:
       - broker-mirror2-data:/var/lib/kafka/data
+      - ./monitoring/jmx:/opt/jmx:ro
     networks:
       - kafka-internal
 
@@ -94,8 +98,10 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_OPTS: "-javaagent:/opt/jmx/jmx_prometheus_javaagent.jar=9404:/opt/jmx/kafka.yml"
     volumes:
       - broker-mirror3-data:/var/lib/kafka/data
+      - ./monitoring/jmx:/opt/jmx:ro
     networks:
       - kafka-internal
 

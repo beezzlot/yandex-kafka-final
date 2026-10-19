@@ -1,0 +1,36 @@
+groups:
+  - name: kafka-availability
+    rules:
+      - alert: KafkaBrokerUnavailable
+        expr: up{job="kafka"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Недоступен брокер {{ $labels.broker }}"
+          description: >-
+            Endpoint JMX Exporter брокера {{ $labels.broker }}
+            в кластере {{ $labels.cluster }} недоступен более минуты.
+            Адрес: {{ $labels.instance }}.
+
+      - alert: KafkaUnderReplicatedPartitions
+        expr: kafka_under_replicated_partitions{job="kafka"} > 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Неполная репликация на {{ $labels.broker }}"
+          description: >-
+            Кластер {{ $labels.cluster }}, брокер {{ $labels.broker }}:
+            under-replicated partitions = {{ $value }} более двух минут.
+
+      - alert: KafkaOfflinePartitions
+        expr: kafka_offline_partitions_count{job="kafka"} > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Недоступные партиции в кластере {{ $labels.cluster }}"
+          description: >-
+            Брокер {{ $labels.broker }} сообщает о недоступных
+            партициях: {{ $value }}.

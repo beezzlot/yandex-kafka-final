@@ -44,7 +44,6 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:SSL,EXTERNAL:SSL
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_SSL_CLIENT_AUTH: "required"
-      # Используем абсолютные пути (LOCATION вместо FILENAME) для 100% надежности
       KAFKA_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/broker1.keystore.jks
       KAFKA_SSL_KEYSTORE_PASSWORD: changeit
       KAFKA_SSL_KEY_PASSWORD: changeit
@@ -54,9 +53,11 @@ services:
       KAFKA_SSL_TRUSTSTORE_PASSWORD: changeit
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_OPTS: "-javaagent:/opt/jmx/jmx_prometheus_javaagent.jar=9404:/opt/jmx/kafka.yml"
     volumes:
       - broker1-data:/var/lib/kafka/data
       - ./ssl/broker1:/etc/kafka/secrets:ro
+      - ./monitoring/jmx:/opt/jmx:ro
     networks:
       - kafka-internal
 
@@ -85,12 +86,14 @@ services:
       KAFKA_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/broker2.truststore.jks
       KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
       KAFKA_SUPER_USERS: "User:CN=app;User:CN=broker1;User:CN=broker2;User:CN=broker3"
-      KAFKA_SSL_TRUSTSTORE_PASSWORD: changeit  # <-- ЭТО БЫЛО ПРОПУЩЕНО
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: changeit  
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_OPTS: "-javaagent:/opt/jmx/jmx_prometheus_javaagent.jar=9404:/opt/jmx/kafka.yml"
     volumes:
       - broker2-data:/var/lib/kafka/data
       - ./ssl/broker2:/etc/kafka/secrets:ro
+      - ./monitoring/jmx:/opt/jmx:ro
     networks:
       - kafka-internal
 
@@ -119,12 +122,14 @@ services:
       KAFKA_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/broker3.truststore.jks
       KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
       KAFKA_SUPER_USERS: "User:CN=app;User:CN=broker1;User:CN=broker2;User:CN=broker3"
-      KAFKA_SSL_TRUSTSTORE_PASSWORD: changeit  # <-- ЭТО БЫЛО ПРОПУЩЕНО
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: changeit  
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_OPTS: "-javaagent:/opt/jmx/jmx_prometheus_javaagent.jar=9404:/opt/jmx/kafka.yml"
     volumes:
       - broker3-data:/var/lib/kafka/data
       - ./ssl/broker3:/etc/kafka/secrets:ro
+      - ./monitoring/jmx:/opt/jmx:ro
     networks:
       - kafka-internal
 
